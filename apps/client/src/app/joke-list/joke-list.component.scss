@@ -1,0 +1,23 @@
+.container {
+  height: calc(100vh - 185px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.body {
+  box-shadow: rgba(149, 157, 165, 0.1) 0px 8px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: auto;
+  min-width: 90%;
+  padding: 1rem;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}

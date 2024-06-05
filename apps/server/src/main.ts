@@ -85,29 +85,31 @@ app.get('/jokes/:id', (req, res, next) => {
 
 app.get('/jokes', (req, res) => {
   const page = parseInt(req.query.page as string) || 1;
-  const pageSize = 10;
+  const pageSize = parseInt(req.query.pageSize as string) || 10;
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize;
   const totalJokes = Object.keys(jokes).length;
 
+  const sortBy = (req.query.sortBy as string).toLowerCase();
+
   if (startIndex >= totalJokes) {
     res.send('Page not found');
   } else {
-    let jokesPerPage = Object.values(jokes).slice(startIndex, endIndex);
-
-    const sortBy = req.query.sortBy as string;
+    let jokesList = jokes;
+    // sorting
     if (sortBy === 'type') {
-      jokesPerPage = jokesPerPage.sort((a, b) => a.type.localeCompare(b.type));
+      jokesList = jokesList.sort((a, b) => a.type.localeCompare(b.type));
     } else if (sortBy === 'setup') {
-      jokesPerPage = jokesPerPage.sort((a, b) =>
-        a.setup.localeCompare(b.setup)
-      );
+      jokesList = jokesList.sort((a, b) => a.setup.localeCompare(b.setup));
     }
+
+    const jokesPerPage = Object.values(jokesList).slice(startIndex, endIndex);
 
     res.json({
       jokes: jokesPerPage,
       currentPage: page,
       totalPages: Math.ceil(totalJokes / pageSize),
+      totalRecords: jokes.length,
     });
   }
 });

@@ -1,0 +1,23 @@
+<div class="card">
+  <div class="flex mb-2 gap-2 justify-content-center">
+    <p-button
+      (click)="viewOption = 'list'"
+      rounded="true"
+      [outlined]="viewOption === 'random'"
+      label="Joke List"
+    />
+    <p-button
+      (click)="viewOption ='random'"
+      rounded="true"
+      [outlined]="viewOption === 'list'"
+      label="Random Joke"
+    />
+  </div>
+  <p-divider />
+
+  @if(viewOption === 'list') {
+    <corp-joke-list></corp-joke-list>
+  } @else if (viewOption === 'random') {
+    <corp-random-joke></corp-random-joke>
+  }
+</div>

@@ -1,0 +1,1 @@
+export type SortByOption = 'Type' | 'Setup';
