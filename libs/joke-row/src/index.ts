@@ -1,1 +1,1 @@
-export * from './vue-shims.d';
+export * from './lib';

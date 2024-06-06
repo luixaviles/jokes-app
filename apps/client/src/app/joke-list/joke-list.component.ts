@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
@@ -8,6 +8,8 @@ import { JokeRowComponent } from '../joke-row/joke-row.component';
 import { SortByOption } from '../model/sort-by-option';
 import { JokesService } from '../services/jokes.service';
 import { map, tap } from 'rxjs';
+
+import '@joke-item/joke-item';
 
 @Component({
   selector: 'corp-joke-list',
@@ -19,6 +21,7 @@ import { map, tap } from 'rxjs';
     DropdownModule,
     JokeRowComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './joke-list.component.html',
   styleUrl: './joke-list.component.scss',
 })

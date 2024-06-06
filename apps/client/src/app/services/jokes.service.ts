@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Joke } from '../model/joke.interface';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { SortByOption } from '../model/sort-by-option';
 import { JokesResponse } from '../model/jokes-response';
@@ -27,5 +27,11 @@ export class JokesService {
           page
         },
       });
+  }
+
+  removeJoke(jokeId: number): Observable<string> {
+    return this.http.delete<string>(`${apiHost}/jokes/${jokeId}`).pipe(
+      tap(res => console.log('delete', res))
+    );
   }
 }

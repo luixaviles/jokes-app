@@ -1,4 +1,15 @@
 <div class="flex flex-column gap-4 justify-content-center">
-        <corp-joke-row [joke]="joke()"></corp-joke-row>
-        <p-button (click)="generateRandomJoke()" class="align-self-center" rounded="true" severity="success" label="Get A Random Joke" />
+  <corp-joke-item
+    [joke]="joke()"
+    (listen)="listen($event)"
+    (edit)="edit($event)"
+    (remove)="remove($event)"
+  ></corp-joke-item>
+  <p-button
+    (click)="generateRandomJoke()"
+    class="align-self-center"
+    rounded="true"
+    severity="success"
+    label="Get A Random Joke"
+  />
 </div>

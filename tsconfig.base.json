@@ -15,7 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@joke-app/joke-row": ["libs/joke-row/src/index.ts"]
+      "@joke-app/joke-row": ["libs/joke-row/src/index.ts"],
+      "@joke-item/joke-item2": ["libs/joke-item/src/index.ts"],
+      "@joke-item/joke-item": ["dist/libs/joke-item"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -18,5 +18,5 @@ type ViewOption = 'list' | 'random';
 export class HomeComponent {
   activeIndex = 0;
 
-  viewOption: ViewOption = 'list';
+  viewOption: ViewOption = 'random';
 }

@@ -11,7 +11,7 @@
   </div>
   <div class="body gap-3">
     @for (joke of jokeList() | async; track $index) {
-    <corp-joke-row [joke]="joke"></corp-joke-row>
+    <corp-joke-item [joke]="joke"></corp-joke-item>
     }
   </div>
 
