@@ -1,4 +1,6 @@
-export const jokes = [
+import { Joke } from './joke.interface';
+
+const _jokesData: Joke[] = [
   {
     type: 'general',
     setup: 'What did the fish say when it hit the wall?',
@@ -2062,3 +2064,24 @@ export const jokes = [
     punchline: 'Elf-ies.',
   },
 ];
+
+let lastJokeId = 0;
+const _jokes: Joke[] = _jokesData.map(j => ({...j, id: ++lastJokeId}));
+
+export const readJokes = (): Joke[] => {
+  return _jokes;
+}
+
+export const deleteJoke = (id) => {
+  const index = _jokes.findIndex(joke => joke.id === +id);
+  if (index !== -1) {
+    _jokes.splice(index, 1);
+  } else {
+    console.log('Joke not found');
+  }
+}
+
+export const saveJoke = (joke: Joke) => {
+  joke.id = ++lastJokeId;
+  _jokes.push(joke);
+}

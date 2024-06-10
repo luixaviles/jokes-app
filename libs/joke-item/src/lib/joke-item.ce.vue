@@ -10,9 +10,6 @@
             <Button icon="pi" rounded text raised @click="emitEvent('listen')">
               <i class="pi pi-volume-up"></i>
             </Button>
-            <Button icon="pi" rounded text raised @click="emitEvent('edit')">
-              <i class="pi pi-pencil"></i>
-            </Button>
             <Button icon="pi pi-trash" rounded text raised @click="emitEvent('remove')">
               <i class="pi pi-trash"></i>
             </Button>
@@ -37,6 +34,7 @@ import Card from 'primevue/card';
 import Tag from 'primevue/tag';
 import Button from 'primevue/button';
 import Divider from 'primevue/divider';
+
 export default {
   name: 'JokeItemComponent',
   props: {
@@ -48,14 +46,13 @@ export default {
     Card,
     Tag,
     Button,
-    Divider,
+    Divider
   },
   emits: ['listen', 'edit', 'remove'],
   setup(props, { emit }) {
     const { joke } = toRefs(props);
 
     const emitEvent = (eventName) => {
-      console.log('emitEvent', eventName, joke.value);
       emit(eventName, joke.value);
     };
 

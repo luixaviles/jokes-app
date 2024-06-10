@@ -1,4 +1,7 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+
 import LimitingMiddleware from 'limiting-middleware';
 import {
   randomJoke,
@@ -6,14 +9,19 @@ import {
   randomSelect,
   jokeByType,
   jokeById,
-  jokes,
 } from './handler';
+import { deleteJoke, readJokes, saveJoke } from './jokes/jokes';
+import { Joke } from './jokes/joke.interface';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const host = process.env.HOST ?? 'localhost';
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 
-const app = express();
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const genModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
 app.use(new LimitingMiddleware().limitByIp());
 
 app.use((req, res, next) => {
@@ -50,9 +58,9 @@ app.get('/jokes/random(/*)?', (req, res) => {
   } catch (err) {
     res.send('The passed path is not a number.');
   } finally {
-    const count = Object.keys(jokes).length;
+    const count = Object.keys(readJokes()).length;
 
-    if (num > Object.keys(jokes).length) {
+    if (num > Object.keys(readJokes()).length) {
       res.send(`The passed path exceeds the number of jokes (${count}).`);
     } else {
       res.json(randomSelect(num));
@@ -88,12 +96,13 @@ app.get('/jokes', (req, res) => {
   const pageSize = parseInt(req.query.pageSize as string) || 10;
   const startIndex = (page - 1) * pageSize;
   const endIndex = startIndex + pageSize;
+  const jokes = readJokes();
   const totalJokes = Object.keys(jokes).length;
 
   const sortBy = (req.query.sortBy as string).toLowerCase();
 
   if (startIndex >= totalJokes) {
-    res.send('Page not found');
+    res.send(404).send('Page not found');
   } else {
     let jokesList = jokes;
     // sorting
@@ -101,6 +110,8 @@ app.get('/jokes', (req, res) => {
       jokesList = jokesList.sort((a, b) => a.type.localeCompare(b.type));
     } else if (sortBy === 'setup') {
       jokesList = jokesList.sort((a, b) => a.setup.localeCompare(b.setup));
+    } else if(sortBy === 'id') {
+      jokesList = jokesList.sort((a, b) => a.id - b.id);
     }
 
     const jokesPerPage = Object.values(jokesList).slice(startIndex, endIndex);
@@ -119,7 +130,9 @@ app.delete('/jokes/:id', (req, res, next) => {
     const { id } = req.params;
     const joke = jokeById(+id);
     if (!joke) return next({ statusCode: 404, message: 'joke not found' });
-    delete jokes[id];
+
+    deleteJoke(id);
+
     res.json({ message: 'joke deleted successfully' });
   } catch (e) {
     return next(e);
@@ -140,15 +153,47 @@ app.put('/jokes/:id', (req, res, next) => {
   }
 });
 
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
+app.post('/joke', (req, res, next) => {
+  const { setup, punchline, type } = req.body;
+  const newJoke: Joke = {
+    setup,
+    punchline,
+    type,
+  };
 
-  res.status(statusCode).json({
-    type: 'error',
-    message: err.message,
-  });
+  saveJoke(newJoke);
+  res.json(newJoke);
 });
 
-app.listen(port, host, () => {
-  console.log(`[ ready ] http://${host}:${port}`);
+app.get('/ai/joke', async (req, res, next) => {
+  try {
+    const jokes = readJokes();
+
+    const prompt = `You're an expert writing jokes of the following types: 'programming' and 'knock-knock'.
+    Generate a new joke following the provided examples and return a single JSON object with the provided structure. Return the JSON content only. 
+    <examples>
+    ${jokes}
+    </examples>
+
+    <structure>
+    {
+        "type": ""
+        "setup": "",
+        "punchline": ""
+    }
+    </structure>
+    `;
+    const result = await genModel.generateContent(prompt);
+    const response = await result.response;
+    const generatedJoke = response.text();
+  
+    res.json(JSON.parse(generatedJoke));
+  } catch (e) {
+
+    return next(e);
+  }
+});
+
+app.listen(port, () => {
+  console.log(`[ ready ] http://localhost:${port}`);
 });

@@ -11,12 +11,19 @@
   </div>
   <div class="body gap-3">
     @for (joke of jokeList() | async; track $index) {
-    <corp-joke-item [joke]="joke"></corp-joke-item>
+        <corp-joke-row [joke]="joke" (removeConfirmed)="removeConfirmed(joke)"></corp-joke-row>
+    }
+
+    @if(loadingState === 'loading'){
+        @for (i of skeletonList(); track $index) {
+            <p-skeleton height="4rem" />
+        }
     }
   </div>
 
   <div class="footer pt-5">
     <p-paginator
+      #paginator
       (onPageChange)="onPageChange($event)"
       [first]="0"
       [rows]="pageSizeOption()"

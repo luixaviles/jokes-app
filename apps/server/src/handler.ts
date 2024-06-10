@@ -1,16 +1,8 @@
-import {jokes} from './jokes/jokes';
-
-interface Joke {
-  id: number;
-  type: string;
-  setup: string;
-  punchline: string;
-}
-
-let lastJokeId = 0;
-jokes.forEach((jk: Joke) => jk.id = ++lastJokeId); 
+import { Joke } from './jokes/joke.interface';
+import {readJokes} from './jokes/jokes';
 
 const randomJoke = () => {
+  const jokes = readJokes();
   return jokes[Math.floor(Math.random() * jokes.length)];
 }
 
@@ -33,14 +25,14 @@ const randomN = (jokeArray: Joke[], n: number) => {
   });
 };
 
-const randomTen = () => randomN(jokes as Joke[], 10);
+const randomTen = () => randomN(readJokes(), 10);
 
-const randomSelect = (number: number) => randomN(jokes as Joke[], number);
+const randomSelect = (number: number) => randomN(readJokes(), number);
 
 const jokeByType = (type: string, n: number) => {
-  return randomN(jokes.filter((joke: Joke) => joke.type === type) as Joke[], n);
+  return randomN(readJokes().filter((joke: Joke) => joke.type === type) as Joke[], n);
 };
 
-const jokeById = (id: number) => (jokes.filter((jk: Joke) => jk.id === id)[0]);
+const jokeById = (id: number) => (readJokes().filter((jk: Joke) => jk.id === id)[0]);
 
-export { jokes, randomJoke, randomN, randomTen, randomSelect, jokeById, jokeByType };
+export { randomJoke, randomN, randomTen, randomSelect, jokeById, jokeByType };

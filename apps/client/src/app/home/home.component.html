@@ -1,23 +1,33 @@
 <div class="card">
-  <div class="flex mb-2 gap-2 justify-content-center">
+  <div class="flex mb-4 gap-2 justify-content-center">
+    <p-tabMenu 
+    [model]="menuItems" 
+    [activeItem]="activeMenuItem"
+    (activeItemChange)="onActiveMenuItemChange($event)" />
+
     <p-button
-      (click)="viewOption = 'list'"
-      rounded="true"
-      [outlined]="viewOption === 'random'"
-      label="Joke List"
-    />
-    <p-button
-      (click)="viewOption ='random'"
-      rounded="true"
-      [outlined]="viewOption === 'list'"
-      label="Random Joke"
+      class="ml-auto"
+      icon="pi pi-plus"
+      [rounded]="true"
+      severity="success"
+      (click)="visible = true"
     />
   </div>
-  <p-divider />
 
   @if(viewOption === 'list') {
-    <corp-joke-list></corp-joke-list>
+  <corp-joke-list></corp-joke-list>
   } @else if (viewOption === 'random') {
-    <corp-random-joke></corp-random-joke>
+  <corp-random-joke></corp-random-joke>
   }
 </div>
+
+@if(visible) {
+  <p-dialog
+    header="Add a New Joke"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '50rem' }"
+  >
+    <corp-joke-add (cancel)="visible = false"></corp-joke-add>
+  </p-dialog>
+}

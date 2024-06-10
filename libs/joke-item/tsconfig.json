@@ -7,10 +7,16 @@
     "jsx": "preserve",
     "jsxImportSource": "vue",
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": [
+      "vue"
+    ]
   },
   "files": [],
-  "include": [],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+  ],
   "references": [
     {
       "path": "./tsconfig.lib.json"
