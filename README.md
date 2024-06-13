@@ -1,6 +1,9 @@
 # Jokes App - Node.js + Angular/Vue
 A Fullstack web application implemented using TypeScript language.
 
+## Tech Stack
+Node.js, Angular, Vue.js, Web Components, Docker, Google Cloud Platform, Firebase
+
 ## Live Application
 
 [https://jokes-app-425623.web.app/](https://jokes-app-425623.web.app/)
@@ -26,7 +29,7 @@ As a user:
 * The `libs/joke-item` is an independent library to create a reusable web component. It's based on Vue.js
 * All UI components are based on PrimeNG(Angula application) and PrimeVue(Vue.js library)
 
-## Additional tasks performed
+## Additional considerations
 * Considered a long-term vision for the implementation and it can support multiple applications, libraries and shared code.
 * The Server application has been deployed on Google Cloud.
 * The Client application has been deployed on Firebase hosting.
@@ -38,7 +41,7 @@ As a user:
 <img src="./screenshots/mobile.png?raw=true" width="400">
 
 * Text-to-Speech feature based on Web Speech API implemented.
-* Generative AI integration to allow adding new Jokes to the app.
+* Generative AI integration will allow the addition of new jokes to the app.
 
 
 
